@@ -50,8 +50,6 @@ function App() {
                         className="input1"
                     />
 
-                    {/* <br />
-                <br /> */}
 
                     <input
                         type="text"
