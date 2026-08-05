@@ -2,11 +2,15 @@ const express = require("express");
 const cors = require("cors");
 const axios = require("axios");
 require("dotenv").config();
-const PORT = process.env.PORT || 5000;
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type"]
+}));
+
 app.use(express.json());
 
 app.post("/api/test", async (req, res) => {
@@ -29,17 +33,21 @@ app.post("/api/test", async (req, res) => {
         );
 
         res.json({
-            message: "Telegramga yuborildi!",
+            message: "Telegramga yuborildi!"
         });
+
     } catch (error) {
         console.log(error.response?.data || error.message);
 
         res.status(500).json({
-            message: "Xatolik yuz berdi",
+            message: "Xatolik yuz berdi"
         });
     }
 });
 
+
+const PORT = process.env.PORT || 5000;
+
 app.listen(PORT, () => {
-    console.log("Server ishlayapti: http://localhost:5000");
+    console.log(`Server ishlayapti: ${PORT}`);
 });
