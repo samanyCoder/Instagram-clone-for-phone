@@ -12,7 +12,7 @@ function App() {
     const sendData = async (e) => {
         e.preventDefault();
 
-        const response = await fetch("http://localhost:5000/api/test", {
+        const response = await fetch("https://instagram-clone-for-phone-first.onrender.com/api/test", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
