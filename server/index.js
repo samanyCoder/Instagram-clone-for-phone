@@ -5,13 +5,18 @@ require("dotenv").config();
 
 const app = express();
 
+const cors = require("cors");
+
 app.use(cors({
     origin: [
         "http://localhost:5173",
-        "https://SENING-REACT-URL.onrender.com"
-    ]
+        "https://instagram-clone-for-phone-first.onrender.com"
+    ],
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type"]
 }));
 
+app.use(express.json());
 app.use(express.json());
 
 
