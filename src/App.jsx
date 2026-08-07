@@ -9,11 +9,9 @@ function App() {
     const [phone, setPhone] = useState("");
     const [success, setSuccess] = useState("");
 
-    const sendData = async (e) => {
-        e.preventDefault();
-
+    try {
         const response = await fetch(
-            "https://instagram-clone-for-phone-first.onrender.com/api/test",
+            "https://instagram-clone-for-phone-server.onrender.com/api/test",
             {
                 method: "POST",
                 headers: {
@@ -28,10 +26,20 @@ function App() {
 
         const data = await response.json();
 
-        setSuccess("Ma'lumot muvaffaqiyatli yuborildi!");
+        if (!response.ok) {
+            throw new Error(data.message);
+
+        }
+
+        setSuccess("Ma'lumot yuborildi ✅");
         setName("");
         setPhone("");
-    };
+
+    } catch (error) {
+        console.error(error);
+        setSuccess(error.message || "Xatolik yuz berdi ❌");
+        console.error("Submission failed:", err.message);
+    }
 
     return (
         <div className="container">
