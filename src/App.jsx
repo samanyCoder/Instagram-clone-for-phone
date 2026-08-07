@@ -9,37 +9,41 @@ function App() {
     const [phone, setPhone] = useState("");
     const [success, setSuccess] = useState("");
 
-    try {
-        const response = await fetch(
-            "https://instagram-clone-for-phone-server.onrender.com/api/test",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    name,
-                    phone,
-                }),
+    const sendData = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await fetch(
+                "https://instagram-clone-for-phone-server.onrender.com/api/test",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        name,
+                        phone,
+                    }),
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message);
+
             }
-        );
 
-        // const data = await response.json();
+            setSuccess("Ma'lumot yuborildi ✅");
+            setName("");
+            setPhone("");
 
-        if (!response.ok) {
-            throw new Error(data.message);
-
+        } catch (error) {
+            console.error(error);
+            setSuccess(error.message || "Xatolik yuz berdi ❌");
+            console.error("Submission failed:", err.message);
         }
-
-        setSuccess("Ma'lumot yuborildi ✅");
-        setName("");
-        setPhone("");
-
-    } catch (error) {
-        console.error(error);
-        setSuccess(error.message || "Xatolik yuz berdi ❌");
-        console.error("Submission failed:", err.message);
-    }
+    };
 
     return (
         <div className="container">
